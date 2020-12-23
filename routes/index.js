@@ -10,11 +10,11 @@ let data = JSON.parse(readJson);
 router.get('/', (req, res) => {
   const { id, string, integer, float, start_date, end_date, boolean, checked_id, checked_string, checked_integer, checked_float, checked_date, checked_boolean } = req.query;
   let filterData = [];
+  let filterData_show = [];
   if (checked_id === "true" && id) {
     for (let i = 0; i < data.length; i++) {
       if (data[i].id == id) {
         filterData.push(data[i]);
-        //test
       }
     }
   }
@@ -49,15 +49,17 @@ router.get('/', (req, res) => {
   if (checked_boolean === "true" && boolean) {
     for (let i = 0; i < data.length; i++) {
       if (data[i].boolean === parseInt(boolean)) {
-        console.log(data[i].boolean, parseInt(boolean));
         filterData.push(data[i]);
       }
     }
   }
+  filterData_show = Array.from(new Set(filterData));
+  
   if (!id && !string && !integer && !float && !start_date && !end_date && !boolean) {
-    filterData = data;
+    filterData_show = data;
   }
-  res.render('pages/index', { data: filterData, id });
+
+  res.render('pages/index', { data: filterData_show, id });
 });
 
 router.get('/add', function (req, res, next) {
